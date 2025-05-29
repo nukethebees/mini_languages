@@ -9,17 +9,20 @@
 namespace pl {
 class scanner {
 public:
-    scanner(std::string_view file)
-        : file(file) {}
+    scanner(std::string_view file_)
+        : file_(file_) {}
 
     auto current_char() -> char {
         if (is_eof()) {
             return '\0';
         }
-        return file[position + offset];
+        return file_[position + offset];
+    }
+    auto file() const -> std::string_view {
+        return file_;
     }
     auto is_eof() const -> bool {
-        return current_position() >= file.size();
+        return current_position() >= file_.size();
     }
     void reset() {
         position = 0;
@@ -54,10 +57,10 @@ private:
         return position + offset;
     }
     auto at_least_n_chars_remaining(file_offset n) const -> bool {
-        return current_position() < (file.size() - n);
+        return current_position() < (file_.size() - n);
     }
 
-    std::string_view file;
+    std::string_view file_;
     file_position position{0};
     file_offset offset{0};
 };

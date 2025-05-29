@@ -2,7 +2,7 @@
 
 namespace pl {
 auto scanner::scan_token() -> token {
-    auto const file_length{file.size()};
+    auto const file_length{file_.size()};
 
     if (is_eof()) {
         return create_end_of_file_token();
@@ -48,7 +48,7 @@ auto scanner::scan_token() -> token {
                         return create_error_token();
                     }
 
-                    if (file.substr(current_position(), 5) == "print") {
+                    if (file_.substr(current_position(), 5) == "print") {
                         offset += 5;
                         auto tkn{create_token(token_type::print)};
                         advance_position_to_offset();
