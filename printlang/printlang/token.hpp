@@ -9,5 +9,8 @@ struct token {
     token_type type;
     file_position position;
     token_length length;
+
+    token(token_type type, file_position position, token_length length)
+        : type(type), position(position), length(length) {}
 };
 }
