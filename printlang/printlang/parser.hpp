@@ -11,6 +11,6 @@ public:
         : scan(file) {}
 
 private:
-    scanner scan{file};
+    scanner scan;
 };
 }

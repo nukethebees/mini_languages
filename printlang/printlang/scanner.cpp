@@ -11,14 +11,21 @@ auto scanner::scan_token() -> token {
     while (!is_eof()) {
         char c{current_char()};
         switch (c) {
+            case '\n':
+            {
+                offset++;
+                auto tkn{create_token(token_type::newline)};
+                advance_position_to_offset();
+                return tkn;
+            }
             case ' ':
                 [[fallthrough]];
             case '\t':
                 [[fallthrough]];
             case '\r':
-                [[fallthrough]];
-            case '\n':
+            {
                 break;
+            }
             case '#':
             {
                 advance_offset_until('\n');
@@ -28,7 +35,7 @@ auto scanner::scan_token() -> token {
             case '"':
             {
                 advance_position_beyond_offset();
-                advance_offset_until('\n');
+                advance_offset_until('\"');
 
                 if (is_eof()) {
                     return create_error_token();
@@ -44,11 +51,12 @@ auto scanner::scan_token() -> token {
             default:
             {
                 if (c == 'p') {
-                    if (!at_least_n_chars_remaining(5)) {
+                    if (!at_least_n_chars_remaining(4)) {
                         return create_error_token();
                     }
 
-                    if (file_.substr(current_position(), 5) == "print") {
+                    auto substr{file_.substr(position, 5)};
+                    if (substr == "print") {
                         offset += 5;
                         auto tkn{create_token(token_type::print)};
                         advance_position_to_offset();
@@ -62,6 +70,6 @@ auto scanner::scan_token() -> token {
         advance_position_beyond_offset();
     }
 
-    return create_error_token();
+    return create_end_of_file_token();
 }
 }
