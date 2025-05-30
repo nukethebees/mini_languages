@@ -13,8 +13,12 @@ struct token {
     token_length length;
 
     constexpr token(token_type type, file_position position, token_length length) noexcept
-        : type(type), position(position), length(length) {}
+        : type(type)
+        , position(position)
+        , length(length) {}
 
-    auto operator<=>(const token & other) const noexcept = default;
+    auto lexeme(std::string_view file) -> std::string_view { return file.substr(position, length); }
+
+    auto operator<=>(token const& other) const noexcept = default;
 };
 }

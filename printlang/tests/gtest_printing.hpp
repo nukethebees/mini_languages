@@ -1,11 +1,16 @@
+#pragma once
+
 #include <ostream>
 #include <string>
 
-#include "printlang/token_type.hpp"
+#include "printlang/compiler_error.hpp"
+#include "printlang/parse_tree.hpp"
+#include "printlang/print_stmt.hpp"
 #include "printlang/token.hpp"
+#include "printlang/token_type.hpp"
 
 namespace pl {
-void PrintTo(token_type tt, std::ostream * os) {
+inline void PrintTo(token_type tt, std::ostream* os) {
     std::string name{""};
 
     switch (tt) {
@@ -36,9 +41,30 @@ void PrintTo(token_type tt, std::ostream * os) {
     *os << name;
 }
 
-void PrintTo(const token & t, std::ostream * os) {
+inline void PrintTo(token const& t, std::ostream* os) {
     *os << "token{type: ";
     PrintTo(t.type, os);
     *os << ", position: " << t.position << ", length: " << t.length << "}";
+}
+
+inline void PrintTo(print_stmt const& t, std::ostream* os) {
+    *os << "print_stmt{message: \"" << t.message << "\"}";
+}
+
+inline void PrintTo(parse_tree const& pt, std::ostream* os) {
+    *os << "parse_tree{print_stmts: [";
+    for (size_t i = 0; i < pt.print_stmts.size(); ++i) {
+        if (i > 0) {
+            *os << ", ";
+        }
+        PrintTo(pt.print_stmts[i], os);
+    }
+    *os << "]}";
+}
+
+inline void PrintTo(compiler_error const& ce, std::ostream* os) {
+    *os << "compiler_error{msg: \"" << ce.msg() << "\", type: ";
+    PrintTo(ce.type(), os);
+    *os << "}";
 }
 }
