@@ -11,9 +11,10 @@ class Scanner {
     explicit Scanner(std::string_view source)
         : source_(source) {}
 
-    auto source() const { return source_; }
+    auto is_eof() const -> bool { return position_ >= source_.size(); }
     auto position() const { return position_; }
     auto scan_token() -> Token;
+    auto source() const { return source_; }
   private:
     auto char_at(FilePosition offset) {
         auto const i{position_ + offset};
