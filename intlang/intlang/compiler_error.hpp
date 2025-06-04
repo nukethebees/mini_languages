@@ -18,7 +18,7 @@ enum class CompilerErrorType : std::uint8_t {
 class CompilerError {
   public:
     CompilerError() = default;
-    CompilerError(std::string_view msg, CompilerErrorType type, FilePosition pos)
+    CompilerError(CompilerErrorType type, std::string_view msg, FilePosition pos)
         : msg_{msg}
         , type_{type}
         , position_{pos} {}

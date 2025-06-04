@@ -12,6 +12,10 @@ class Parser {
         : scanner_(source) {}
 
     auto parse() -> ErrorOr<ParseTree>;
+    auto expr(std::vector<Expr>& out, Token token) -> ErrorOr<void>;
+    auto unary(std::vector<Expr>& out, Token token) -> ErrorOr<void>;
+    auto binary(std::vector<Expr>& out, Token token) -> ErrorOr<void>;
+    auto literal(std::vector<Expr>& out, Token token) -> ErrorOr<void>;
   private:
     Scanner scanner_;
 };
