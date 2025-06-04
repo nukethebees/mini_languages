@@ -47,8 +47,15 @@ TEST_P(ParserTest, parse_file) {
     }
 }
 
+auto make_error(il::CompilerErrorType err) -> il::ErrorOr<il::ParseTree> {
+    return std::unexpected<il::CompilerError>(il::CompilerError("", err, 0));
+}
+
 static std::vector<ParserTestInput> parser_inputs{
     {"empty_file", "", {}},
+    {"semicolon", ";", {}},
+    // Errors
+    {"plus", "+", make_error(il::CompilerErrorType::unexpected_token)},
 };
 INSTANTIATE_TEST_SUITE_P(ParserTests,
                          ParserTest,

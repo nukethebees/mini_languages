@@ -8,6 +8,10 @@ auto Parser::parse() -> ErrorOr<ParseTree> {
         auto token{scanner_.scan_token()};
 
         switch (token.type()) {
+            using enum TokenType;
+            case semicolon:
+                // Allow empty statements
+                break;
             default:
                 return std::unexpected(CompilerError(
                     "Unexpected token", CompilerErrorType::unexpected_token, token.position()));
