@@ -2,6 +2,7 @@
 
 namespace il {
 auto Parser::parse() -> ErrorOr<ParseTree> {
+    ParseTree out;
 
     while (!scanner_.is_eof()) {
         auto token{scanner_.scan_token()};
@@ -13,7 +14,6 @@ auto Parser::parse() -> ErrorOr<ParseTree> {
         }
     }
 
-    return std::unexpected(CompilerError(
-        "Not implemented", CompilerErrorType::not_implemented_error, scanner_.position()));
+    return out;
 }
 }
