@@ -64,6 +64,7 @@ std::vector<ScannerTestInput> inputs{{
     {"star", "*", {{il::TokenType::star, 0, 1}}},
     {"slash", "/", {{il::TokenType::slash, 0, 1}}},
     {"semicolon", ";", {{il::TokenType::semicolon, 0, 1}}},
+    {"parens", "()", {{il::TokenType::left_paren, 0, 1}, {il::TokenType::right_paren, 1, 1}}},
     {"one_plus",
      "1 +",
      {

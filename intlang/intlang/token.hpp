@@ -14,8 +14,10 @@ enum class TokenType : uint8_t {
     error,
     identifier,
     integer,
+    left_paren,
     minus,
     plus,
+    right_paren,
     semicolon,
     slash,
     star

@@ -27,6 +27,10 @@ auto Scanner::scan_token() -> Token {
                 return make_token(TokenType::slash, offset);
             case ';':
                 return make_token(TokenType::semicolon, offset);
+            case '(':
+                return make_token(TokenType::left_paren, offset);
+            case ')':
+                return make_token(TokenType::right_paren, offset);
             case '0':
                 [[fallthrough]];
             case '1':
