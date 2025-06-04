@@ -2,21 +2,30 @@
 
 #include <string_view>
 
-namespace intlang {
-// The scanner uses a window to extract lexemes from the source code.
-// We use two values:
-//     An integer to represent the current position
-//     A second integer to represent the end of the lexeme
-// A length of zero means there are no characters in the lexeme.
-class Scanner {
-public:
-    Scanner() = default;
-    explicit Scanner(std::string_view source) : source_(source) {}
+#include "token.hpp"
 
-    auto source() const {
-        return source_;
+namespace il {
+class Scanner {
+  public:
+    Scanner() = default;
+    explicit Scanner(std::string_view source)
+        : source_(source) {}
+
+    auto source() const { return source_; }
+    auto position() const { return position_; }
+    auto scan_token() -> Token;
+  private:
+    auto char_at(FilePosition offset) {
+        auto const i{position_ + offset};
+        return i >= source_.size() ? '\0' : source_[i];
     }
-private:
+    auto make_token(TokenType type, TokenLength len, int num = 0) {
+        auto const token_pos{position_};
+        position_ += len;
+        return Token(type, token_pos, len, num);
+    }
+
     std::string_view source_;
+    FilePosition position_{0};
 };
 }
