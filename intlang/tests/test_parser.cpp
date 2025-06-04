@@ -54,21 +54,45 @@ auto make_error(il::CompilerErrorType err) -> il::ErrorOr<il::ParseTree> {
     return std::unexpected<il::CompilerError>(il::CompilerError(err, "", 0));
 }
 
-auto op_one() {
-    using namespace il;
-    ParseTree out;
+struct ExpOut {
+    static auto one() {
+        using namespace il;
+        ParseTree out;
 
-    Expr expr;
-    expr.push_back(LiteralExpr(1));
-    out.exprs.push_back(expr);
+        Expr expr;
+        expr.push_back(LiteralExpr(1));
+        out.exprs.push_back(expr);
 
-    return out;
-}
+        return out;
+    }
+    static auto minus_one() {
+        using namespace il;
+        ParseTree out;
+
+        Expr expr;
+        expr.push_back(LiteralExpr(1));
+        out.exprs.push_back(expr);
+
+        return out;
+    }
+    static auto plus_one() {
+        using namespace il;
+        ParseTree out;
+
+        Expr expr;
+        expr.push_back(LiteralExpr(1));
+        out.exprs.push_back(expr);
+
+        return out;
+    }
+};
 
 static std::vector<ParserTestInput> parser_inputs{
     {"empty_file", "", {}},
     {"semicolon", ";", {}},
-    {"one", "1", op_one()},
+    {"one", "1", ExpOut::one()},
+    {"minus_one", "-1", ExpOut::minus_one()},
+    {"plus_one", "+1", ExpOut::plus_one()},
     // Errors
     {"plus", "+", make_error(il::CompilerErrorType::unexpected_token)},
 };
