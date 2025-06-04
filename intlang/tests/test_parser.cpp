@@ -31,7 +31,7 @@ TEST_P(ParserTest, parse_file) {
 
 // For breakpoints
 #if 1
-    if (param.test_name == "one") {
+    if (param.test_name == "minus_one") {
         auto x{0};
     }
 #endif
@@ -70,7 +70,8 @@ struct ExpOut {
         ParseTree out;
 
         Expr expr;
-        expr.push_back(LiteralExpr(1));
+        auto i0{expr.push_back(LiteralExpr(1))};
+        expr.push_back(UnaryExpr(UnaryExpr::Op::minus, i0));
         out.exprs.push_back(expr);
 
         return out;
@@ -80,7 +81,8 @@ struct ExpOut {
         ParseTree out;
 
         Expr expr;
-        expr.push_back(LiteralExpr(1));
+        auto i0{expr.push_back(LiteralExpr(1))};
+        expr.push_back(UnaryExpr(UnaryExpr::Op::plus, i0));
         out.exprs.push_back(expr);
 
         return out;
@@ -90,9 +92,9 @@ struct ExpOut {
 static std::vector<ParserTestInput> parser_inputs{
     {"empty_file", "", {}},
     {"semicolon", ";", {}},
-    {"one", "1", ExpOut::one()},
-    {"minus_one", "-1", ExpOut::minus_one()},
-    {"plus_one", "+1", ExpOut::plus_one()},
+    {"one", "1;", ExpOut::one()},
+    {"minus_one", "-1;", ExpOut::minus_one()},
+    {"plus_one", "+1;", ExpOut::plus_one()},
     // Errors
     {"plus", "+", make_error(il::CompilerErrorType::unexpected_token)},
 };

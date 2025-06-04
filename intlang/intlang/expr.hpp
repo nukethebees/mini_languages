@@ -6,25 +6,6 @@
 #include <vector>
 
 namespace il {
-class LiteralExpr {
-  public:
-    LiteralExpr() = delete;
-    LiteralExpr(int value)
-        : value_{value} {}
-
-    auto operator<=>(LiteralExpr const&) const = default;
-  private:
-    int value_;
-};
-class UnaryExpr {
-  public:
-    auto operator<=>(UnaryExpr const&) const = default;
-};
-class BinaryExpr {
-  public:
-    auto operator<=>(BinaryExpr const&) const = default;
-};
-
 class ExprIdx {
   public:
     using Index = uint16_t;
@@ -41,6 +22,34 @@ class ExprIdx {
   private:
     Index index_{0};
     Type type_{Type::literal};
+};
+
+class LiteralExpr {
+  public:
+    LiteralExpr() = delete;
+    LiteralExpr(int value)
+        : value_{value} {}
+
+    auto operator<=>(LiteralExpr const&) const = default;
+  private:
+    int value_;
+};
+class UnaryExpr {
+  public:
+    enum class Op : uint8_t { plus, minus };
+
+    UnaryExpr(Op op, ExprIdx expr)
+        : op_{op}
+        , expr_{expr} {}
+
+    auto operator<=>(UnaryExpr const&) const = default;
+  private:
+    Op op_;
+    ExprIdx expr_;
+};
+class BinaryExpr {
+  public:
+    auto operator<=>(BinaryExpr const&) const = default;
 };
 
 class Expr {
