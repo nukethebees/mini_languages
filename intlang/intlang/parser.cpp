@@ -17,6 +17,7 @@ auto Parser::parse() -> ErrorOr<ParseTree> {
                 if (!result) {
                     return std::unexpected(result.error());
                 }
+                break;
             }
             default:
                 return std::unexpected(CompilerError(
@@ -27,24 +28,31 @@ auto Parser::parse() -> ErrorOr<ParseTree> {
     return out;
 }
 
-auto Parser::expr(std::vector<Expr>& out, Token token) -> ErrorOr<void> {
-    return unary(out, token);
+auto Parser::expr(std::vector<Expr>& out, Token token) -> ErrorOr<ExprIdx> {
+    Expr expr;
+    auto result{unary(expr, token)};
+    if (result) {
+        out.push_back(std::move(expr));
+    }
+    return result;
 }
-auto Parser::unary(std::vector<Expr>& out, Token token) -> ErrorOr<void> {
+auto Parser::unary(Expr& out, Token token) -> ErrorOr<ExprIdx> {
     return binary(out, token);
 }
-auto Parser::binary(std::vector<Expr>& out, Token token) -> ErrorOr<void> {
+auto Parser::binary(Expr& out, Token token) -> ErrorOr<ExprIdx> {
     return literal(out, token);
 }
-auto Parser::literal(std::vector<Expr>& out, Token token) -> ErrorOr<void> {
+auto Parser::literal(Expr& out, Token token) -> ErrorOr<ExprIdx> {
     switch (token.type()) {
         using enum TokenType;
+        case integer:
+            return out.push_back(LiteralExpr(token.num()));
         default:
-            return std::unexpected(CompilerError(CompilerErrorType::unexpected_token,
-                                                 "Unexpected token while parsing literal expr.",
-                                                 token.position()));
+            break;
     }
 
-    return {};
+    return std::unexpected(CompilerError(CompilerErrorType::unexpected_token,
+                                         "Unexpected token while parsing literal expr.",
+                                         token.position()));
 }
 }

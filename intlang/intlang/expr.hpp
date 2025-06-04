@@ -2,12 +2,19 @@
 
 #include <compare>
 #include <cstdint>
+#include <type_traits>
 #include <vector>
 
 namespace il {
 class LiteralExpr {
   public:
+    LiteralExpr() = delete;
+    LiteralExpr(int value)
+        : value_{value} {}
+
     auto operator<=>(LiteralExpr const&) const = default;
+  private:
+    int value_;
 };
 class UnaryExpr {
   public:
@@ -40,9 +47,33 @@ class Expr {
   public:
     Expr() = default;
 
+    template <typename U>
+    auto push_back(U&& elem) -> ExprIdx {
+        using UU = std::remove_cvref_t<U>;
+
+        if constexpr (std::is_same_v<UU, LiteralExpr>) {
+            return add_elem<ExprIdx::Type::literal>(literal_, std::move(elem));
+        } else if constexpr (std::is_same_v<UU, UnaryExpr>) {
+            return add_elem<ExprIdx::Type::unary>(unary_, std::move(elem));
+        } else if constexpr (std::is_same_v<UU, BinaryExpr>) {
+            return add_elem<ExprIdx::Type::binary>(binary_, std::move(elem));
+        } else {
+            static_assert(!sizeof(UU), "Missing branch.\n");
+        }
+    }
+
     auto operator<=>(Expr const&) const = default;
   private:
-    std::vector<ExprIdx> indexes_;
+    template <ExprIdx::Type type>
+    auto add_elem(auto& collection, auto&& value) {
+        collection.push_back(std::forward<decltype(value)>(value));
+        auto const idx{collection.size() - 1};
+        auto const expr_idx{ExprIdx(idx, ExprIdx::Type::literal)};
+        index_.push_back(expr_idx);
+        return expr_idx;
+    }
+
+    std::vector<ExprIdx> index_;
     std::vector<LiteralExpr> literal_;
     std::vector<UnaryExpr> unary_;
     std::vector<BinaryExpr> binary_;

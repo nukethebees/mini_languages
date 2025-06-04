@@ -30,8 +30,8 @@ TEST_P(ParserTest, parse_file) {
     il::Parser parser(param.file);
 
 // For breakpoints
-#if 0
-    if (param.test_name == "print_foo") {
+#if 1
+    if (param.test_name == "one") {
         auto x{0};
     }
 #endif
@@ -43,7 +43,10 @@ TEST_P(ParserTest, parse_file) {
         EXPECT_EQ(result.error().type(), param.expected_output.error().type());
     } else {
         ASSERT_TRUE(result);
-        EXPECT_EQ(result.value(), param.expected_output.value());
+        auto const& out{result.value()};
+        auto const& exp{param.expected_output.value()};
+
+        EXPECT_EQ(out, exp);
     }
 }
 
@@ -51,9 +54,21 @@ auto make_error(il::CompilerErrorType err) -> il::ErrorOr<il::ParseTree> {
     return std::unexpected<il::CompilerError>(il::CompilerError(err, "", 0));
 }
 
+auto op_one() {
+    using namespace il;
+    ParseTree out;
+
+    Expr expr;
+    expr.push_back(LiteralExpr(1));
+    out.exprs.push_back(expr);
+
+    return out;
+}
+
 static std::vector<ParserTestInput> parser_inputs{
     {"empty_file", "", {}},
     {"semicolon", ";", {}},
+    {"one", "1", op_one()},
     // Errors
     {"plus", "+", make_error(il::CompilerErrorType::unexpected_token)},
 };

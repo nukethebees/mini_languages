@@ -9,6 +9,10 @@ namespace il {
 struct ParseTree {
     std::vector<Expr> exprs;
 
-    auto operator<=>(ParseTree const &) const = default;
+    ParseTree() = default;
+    ParseTree(std::vector<Expr>&& exprs)
+        : exprs{std::move(exprs)} {}
+
+    auto operator<=>(ParseTree const&) const = default;
 };
 }
