@@ -9,7 +9,7 @@ namespace il {
 class ExprIdx {
   public:
     using Index = uint16_t;
-    enum class Type : uint8_t { literal, unary, binary };
+    enum class Type : uint8_t { literal, grouping, unary, binary };
     ExprIdx() = default;
     constexpr ExprIdx(uint32_t index, Type type)
         : index_(index)
@@ -33,6 +33,15 @@ class LiteralExpr {
     auto operator<=>(LiteralExpr const&) const = default;
   private:
     int value_;
+};
+class GroupingExpr {
+  public:
+    GroupingExpr(ExprIdx expr)
+        : expr_{expr} {}
+
+    auto operator<=>(GroupingExpr const&) const = default;
+  private:
+    ExprIdx expr_;
 };
 class UnaryExpr {
   public:
@@ -62,6 +71,8 @@ class Expr {
 
         if constexpr (std::is_same_v<UU, LiteralExpr>) {
             return add_elem<ExprIdx::Type::literal>(literal_, std::move(elem));
+        } else if constexpr (std::is_same_v<UU, GroupingExpr>) {
+            return add_elem<ExprIdx::Type::grouping>(group_, std::move(elem));
         } else if constexpr (std::is_same_v<UU, UnaryExpr>) {
             return add_elem<ExprIdx::Type::unary>(unary_, std::move(elem));
         } else if constexpr (std::is_same_v<UU, BinaryExpr>) {
@@ -83,6 +94,7 @@ class Expr {
     }
 
     std::vector<ExprIdx> index_;
+    std::vector<GroupingExpr> group_;
     std::vector<LiteralExpr> literal_;
     std::vector<UnaryExpr> unary_;
     std::vector<BinaryExpr> binary_;

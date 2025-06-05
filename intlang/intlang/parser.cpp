@@ -61,6 +61,12 @@ auto Parser::literal(Expr& out, Token token) -> ErrorOr<ExprIdx> {
         using enum TokenType;
         case integer:
             return out.push_back(LiteralExpr(token.num()));
+        case left_paren: {
+            auto next_tkn{scanner_.scan_token()};
+            TRY_ASSIGN(inner_expr, unary(out, next_tkn));
+            TRY(consume_and_discard(TokenType::right_paren));
+            return out.push_back(GroupingExpr(*inner_expr));
+        }
         default:
             break;
     }

@@ -87,6 +87,17 @@ struct ExpOut {
 
         return out;
     }
+    static auto group_one() {
+        using namespace il;
+        ParseTree out;
+
+        Expr expr;
+        auto i0{expr.push_back(LiteralExpr(1))};
+        expr.push_back(GroupingExpr(i0));
+        out.exprs.push_back(expr);
+
+        return out;
+    }
 };
 
 static std::vector<ParserTestInput> parser_inputs{
@@ -95,6 +106,7 @@ static std::vector<ParserTestInput> parser_inputs{
     {"one", "1;", ExpOut::one()},
     {"minus_one", "-1;", ExpOut::minus_one()},
     {"plus_one", "+1;", ExpOut::plus_one()},
+    {"group_one", "(1);", ExpOut::group_one()},
     // Errors
     {"plus", "+", make_error(il::CompilerErrorType::unexpected_token)},
 };
