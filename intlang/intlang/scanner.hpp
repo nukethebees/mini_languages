@@ -15,6 +15,13 @@ class Scanner {
     auto position() const { return position_; }
     auto scan_token() -> Token;
     auto source() const { return source_; }
+    void roll_back(TokenLength len) {
+        if (len > position_) {
+            position_ = 0;
+        } else {
+            position_ -= len;
+        }
+    }
   private:
     auto char_at(FilePosition offset) {
         auto const i{position_ + offset};

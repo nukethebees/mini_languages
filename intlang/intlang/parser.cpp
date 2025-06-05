@@ -53,9 +53,6 @@ auto Parser::unary(Expr& out, Token token) -> ErrorOr<ExprIdx> {
 
     return binary(out, token);
 }
-auto Parser::binary(Expr& out, Token token) -> ErrorOr<ExprIdx> {
-    return literal(out, token);
-}
 auto Parser::literal(Expr& out, Token token) -> ErrorOr<ExprIdx> {
     switch (token.type()) {
         using enum TokenType;

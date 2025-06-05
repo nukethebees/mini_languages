@@ -5,6 +5,8 @@
 #include <type_traits>
 #include <vector>
 
+#include "token.hpp"
+
 namespace il {
 class ExprIdx {
   public:
@@ -58,7 +60,16 @@ class UnaryExpr {
 };
 class BinaryExpr {
   public:
+    BinaryExpr(ExprIdx lhs, TokenType op, ExprIdx rhs)
+        : op_{op}
+        , lhs_{lhs}
+        , rhs_{rhs} {}
+
     auto operator<=>(BinaryExpr const&) const = default;
+  private:
+    TokenType op_;
+    ExprIdx lhs_;
+    ExprIdx rhs_;
 };
 
 class Expr {
@@ -88,7 +99,7 @@ class Expr {
     auto add_elem(auto& collection, auto&& value) {
         collection.push_back(std::forward<decltype(value)>(value));
         auto const idx{collection.size() - 1};
-        auto const expr_idx{ExprIdx(idx, ExprIdx::Type::literal)};
+        auto const expr_idx{ExprIdx(idx, type)};
         index_.push_back(expr_idx);
         return expr_idx;
     }

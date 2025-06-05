@@ -31,7 +31,7 @@ TEST_P(ParserTest, parse_file) {
 
 // For breakpoints
 #if 1
-    if (param.test_name == "minus_one") {
+    if (param.test_name == "one_plus_two_times_three") {
         auto x{0};
     }
 #endif
@@ -98,6 +98,32 @@ struct ExpOut {
 
         return out;
     }
+    static auto one_plus_one() {
+        using namespace il;
+        ParseTree out;
+
+        Expr expr;
+        auto i0{expr.push_back(LiteralExpr(1))};
+        auto i1{expr.push_back(LiteralExpr(1))};
+        auto i2{expr.push_back(BinaryExpr(i0, TokenType::plus, i1))};
+        out.exprs.push_back(expr);
+
+        return out;
+    }
+    static auto one_plus_two_times_three() {
+        using namespace il;
+        ParseTree out;
+
+        Expr expr;
+        auto i0{expr.push_back(LiteralExpr(1))};
+        auto i1{expr.push_back(LiteralExpr(2))};
+        auto i2{expr.push_back(LiteralExpr(3))};
+        auto i4{expr.push_back(BinaryExpr(i1, TokenType::star, i2))};
+        auto i3{expr.push_back(BinaryExpr(i0, TokenType::plus, i4))};
+        out.exprs.push_back(expr);
+
+        return out;
+    }
 };
 
 static std::vector<ParserTestInput> parser_inputs{
@@ -107,6 +133,8 @@ static std::vector<ParserTestInput> parser_inputs{
     {"minus_one", "-1;", ExpOut::minus_one()},
     {"plus_one", "+1;", ExpOut::plus_one()},
     {"group_one", "(1);", ExpOut::group_one()},
+    {"one_plus_one", "1 + 1;", ExpOut::one_plus_one()},
+    {"one_plus_two_times_three", "1 + 2 * 3;", ExpOut::one_plus_two_times_three()},
     // Errors
     {"plus", "+", make_error(il::CompilerErrorType::unexpected_token)},
 };

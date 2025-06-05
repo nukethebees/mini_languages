@@ -5,7 +5,8 @@ target_sources(intlang PRIVATE
     "parser.cpp" 
     "ast_processor.cpp" 
     "code_generator.cpp"
- "compile_file.cpp")
+    "compile_file.cpp"
+)
 target_sources(intlang PUBLIC
   FILE_SET HEADERS
   BASE_DIRS ../
