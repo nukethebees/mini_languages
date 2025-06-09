@@ -13,6 +13,7 @@ auto Parser::parse() -> ErrorOr<ParseTree> {
 
         TRY(expr(out.exprs, token));
         TRY(consume_and_discard(TokenType::semicolon));
+        scanner_.consume_whitespace();
     }
 
     return out;

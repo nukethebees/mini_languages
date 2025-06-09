@@ -22,8 +22,18 @@ class Scanner {
             position_ -= len;
         }
     }
+    void consume_whitespace() {
+        while (true) {
+            char const c{char_at(0)};
+            if (c == '\n' || c == ' ') {
+                position_++;
+            } else {
+                break;
+            }
+        }
+    }
   private:
-    auto char_at(FilePosition offset) {
+    auto char_at(FilePosition offset) -> char {
         auto const i{position_ + offset};
         return i >= source_.size() ? '\0' : source_[i];
     }

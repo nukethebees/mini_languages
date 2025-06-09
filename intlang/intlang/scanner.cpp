@@ -13,6 +13,8 @@ auto Scanner::scan_token() -> Token {
         switch (c) {
             case '\0':
                 goto end_of_file;
+            case '\n':
+                [[fallthrough]];
             case ' ':
                 ++position_;
                 offset = 0;

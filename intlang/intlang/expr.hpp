@@ -32,6 +32,8 @@ class LiteralExpr {
     LiteralExpr(int value)
         : value_{value} {}
 
+    auto value() const { return value_; }
+
     auto operator<=>(LiteralExpr const&) const = default;
   private:
     int value_;
@@ -40,6 +42,8 @@ class GroupingExpr {
   public:
     GroupingExpr(ExprIdx expr)
         : expr_{expr} {}
+
+    auto expr() const { return expr_; }
 
     auto operator<=>(GroupingExpr const&) const = default;
   private:
@@ -53,6 +57,9 @@ class UnaryExpr {
         : op_{op}
         , expr_{expr} {}
 
+    auto op() const { return op_; }
+    auto expr() const { return expr_; }
+
     auto operator<=>(UnaryExpr const&) const = default;
   private:
     Op op_;
@@ -64,6 +71,10 @@ class BinaryExpr {
         : op_{op}
         , lhs_{lhs}
         , rhs_{rhs} {}
+
+    auto op() const { return op_; }
+    auto lhs() const { return lhs_; }
+    auto rhs() const { return rhs_; }
 
     auto operator<=>(BinaryExpr const&) const = default;
   private:
@@ -91,6 +102,31 @@ class Expr {
         } else {
             static_assert(!sizeof(UU), "Missing branch.\n");
         }
+    }
+    template <typename U, typename Self>
+    auto get(this Self&& self, ExprIdx idx) -> auto&& {
+        using UU = std::remove_cvref_t<U>;
+        if constexpr (std::is_same_v<UU, LiteralExpr>) {
+            return std::forward<Self>(self).literal_[idx.index()];
+        } else if constexpr (std::is_same_v<UU, GroupingExpr>) {
+            return std::forward<Self>(self).group_[idx.index()];
+        } else if constexpr (std::is_same_v<UU, UnaryExpr>) {
+            return std::forward<Self>(self).unary_[idx.index()];
+        } else if constexpr (std::is_same_v<UU, BinaryExpr>) {
+            return std::forward<Self>(self).binary_[idx.index()];
+        } else {
+            static_assert(!sizeof(UU), "Missing branch.\n");
+        }
+    }
+
+    auto empty() const -> bool { return index_.empty(); }
+    auto size() const -> std::size_t { return index_.size(); }
+    auto indexes() const -> std::vector<ExprIdx> const& { return index_; }
+    auto top() const -> ExprIdx {
+        if (index_.empty()) {
+            return ExprIdx(0, ExprIdx::Type::literal);
+        }
+        return index_.back();
     }
 
     auto operator<=>(Expr const&) const = default;
