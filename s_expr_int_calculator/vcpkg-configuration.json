@@ -1,0 +1,23 @@
+{
+  "default-registry": {
+    "kind": "git",
+    "baseline": "189fcdcb953b871d206ffada6db047496fc3f496",
+    "repository": "https://github.com/microsoft/vcpkg"
+  },
+  "registries": [
+    {
+      "kind": "artifact",
+      "location": "https://github.com/microsoft/vcpkg-ce-catalog/archive/refs/heads/main.zip",
+      "name": "microsoft"
+    },
+    {
+      "kind": "git",
+      "baseline": "5b8738024ba89294ee7c3e29ecb458bfaaca2434",
+      "reference": "HEAD",
+      "repository": "https://github.com/nukethebees/vcpkg-registry",
+      "packages": [
+        "containers"
+      ]
+    }
+  ]
+}

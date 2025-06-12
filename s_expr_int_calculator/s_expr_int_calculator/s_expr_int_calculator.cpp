@@ -1,9 +1,10 @@
-﻿#include "s_expr_int_calculator.h"
+﻿#include <memory_resource>
 
-using namespace std;
+#include <containers/vector.hpp>
 
-int main()
-{
-	cout << "Hello CMake." << endl;
-	return 0;
+#include "s_expr_int_calculator.h"
+
+int main() {
+    std::pmr::vector<int> vec{std::pmr::new_delete_resource()};
+    return 0;
 }
