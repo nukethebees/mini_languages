@@ -11,13 +11,13 @@
       "name": "microsoft"
     },
     {
-      "kind": "git",
-      "baseline": "5b8738024ba89294ee7c3e29ecb458bfaaca2434",
-      "reference": "HEAD",
-      "repository": "https://github.com/nukethebees/vcpkg-registry",
-      "packages": [
-        "containers"
-      ]
+        "kind": "git",
+        "baseline": "75820ed4ff1f0822ebe5d728d2ff940d70cc45cb",
+        "reference": "HEAD",
+        "repository": "https://github.com/nukethebees/vcpkg-registry",
+        "packages": [
+            "containers"
+        ]
     }
   ]
 }
