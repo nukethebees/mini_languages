@@ -3,7 +3,7 @@
 add_library(s_expr_int_calculator STATIC)
 target_sources(s_expr_int_calculator PRIVATE
     "s_expr_int_calculator.cpp"
-)
+ "scanner.cpp")
 target_sources(s_expr_int_calculator PUBLIC
   FILE_SET HEADERS
   BASE_DIRS ../
