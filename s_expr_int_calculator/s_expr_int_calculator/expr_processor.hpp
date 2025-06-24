@@ -1,7 +1,8 @@
 #pragma once 
 
 #include "s_expr.hpp"
+#include "token.hpp"
 
 namespace sx {
-void process(SExpr const & expr);
+auto process(SExpr const & expr) -> TokenNumber;
 }

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+
+#include "token.hpp"
+
 namespace sx {
-void code_generator();
+auto code_generator(TokenNumber num) -> std::pmr::string;
 }

@@ -1,7 +1,7 @@
 #include "expr_processor.hpp"
 
 namespace sx {
-void process(SExpr const& expr) {
-    return;
+auto process(SExpr const& expr) -> TokenNumber {
+    return 0;
 }
 }

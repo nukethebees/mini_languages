@@ -73,6 +73,7 @@ auto scan_file(std::string_view file) -> vec<Token> {
                     out.emplace_back(i, get_length(), TokenType::IDENTIFIER, get_lexeme());
                     break;
                 } else {
+                    offset++;
                     out.emplace_back(
                         i, get_length(), TokenType::UNEXPECTED_CHARACTER, get_lexeme());
                     break;
