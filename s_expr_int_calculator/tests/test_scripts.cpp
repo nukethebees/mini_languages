@@ -20,7 +20,10 @@ TEST_P(CodeGenTest, compile_file) {
         << "\nExpected Output: " << param.expected_output << "\nActual Output: " << out;
 }
 
-std::vector<CodeGenTestInput> const inputs{{{"empty", "", ""}}};
+std::vector<CodeGenTestInput> const inputs{{
+    {"empty", "", ""},
+    {"one_plus_one", "(+ 1 1)", "2"},
+}};
 
 INSTANTIATE_TEST_SUITE_P(CodeGenTests,
                          CodeGenTest,

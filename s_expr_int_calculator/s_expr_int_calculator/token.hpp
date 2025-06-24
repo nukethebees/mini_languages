@@ -7,7 +7,7 @@
 namespace sx {
 using FilePosition = uint16_t;
 using TokenLength = uint8_t;
-using TokenNumber = double;
+using TokenNumber = int64_t;
 
 enum class TokenType : uint8_t { IDENTIFIER, NUMBER, ERROR };
 
