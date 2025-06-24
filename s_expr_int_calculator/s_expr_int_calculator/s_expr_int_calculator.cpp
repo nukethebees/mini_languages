@@ -4,7 +4,7 @@
 #include <containers/pmr_allocator.hpp>
 #include <containers/new_delete_pmr.hpp>
 
-#include "s_expr_int_calculator.h"
+#include "s_expr_int_calculator.hpp"
 
 int main() {
     ml::vector<int, ml::pmr_allocator<int>> vec{ml::get_new_delete_pmr()};
