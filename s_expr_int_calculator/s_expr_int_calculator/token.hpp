@@ -5,11 +5,21 @@
 #include <optional>
 
 namespace sx {
-using FilePosition = uint16_t;
-using TokenLength = uint8_t;
+using FilePosition = std::size_t;
+using TokenLength = std::size_t;
 using TokenNumber = int64_t;
 
-enum class TokenType : uint8_t { IDENTIFIER, NUMBER, ERROR };
+enum class TokenType : uint8_t {
+    IDENTIFIER,
+    NUMBER,
+    ERROR,
+    PLUS,
+    MINUS,
+    LEFT_PAREN,
+    RIGHT_PAREN,
+    END_OF_FILE,
+    UNEXPECTED_CHARACTER
+};
 
 struct Token {
     FilePosition position;
