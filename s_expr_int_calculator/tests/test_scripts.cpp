@@ -21,8 +21,15 @@ TEST_P(CodeGenTest, compile_file) {
 }
 
 std::vector<CodeGenTestInput> const inputs{{
-    {"empty", "", ""},
-    {"one_plus_one", "(+ 1 1)", "2"},
+    {"empty", "", "\n"},
+    {"one_plus_one", "(+ 1 1)", "2\n"},
+    {"1p2p3", "(+ 1 2 3)", "6\n"},
+    {"nested_add", "(+ 1 (+ 1 2))", "4\n"},
+    {"nested_add_2", "(+ 1 (+ 1 (+ 1)))", "3\n"},
+    {"sub", "(- 1 3)", "-2\n"},
+    {"sub2", "(- 1 3 3)", "-5\n"},
+    {"sub_add", "(- 1 3 (+ 1 3))", "-6\n"},
+    {"sub_add_sub", "(- 1 3 (+ 1 (- 1 2)))", "-2\n"},
 }};
 
 INSTANTIATE_TEST_SUITE_P(CodeGenTests,

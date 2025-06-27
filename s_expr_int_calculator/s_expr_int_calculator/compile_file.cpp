@@ -7,6 +7,12 @@
 namespace sx {
 auto compile_file(std::string_view file) -> std::pmr::string {
     auto tokens{scan_file(file)};
+
+    // Leave if just EOF
+    if (tokens.size() == 1) {
+        return "\n";
+    }
+
     auto parser{Parser(tokens)};
     auto expr{parser.parse_file()};
     if (!expr) {
@@ -14,6 +20,10 @@ auto compile_file(std::string_view file) -> std::pmr::string {
     }
 
     auto result{process(*expr)};
-    return code_generator(result);
+    if (!result) {
+        return result.error();
+    }
+
+    return code_generator(*result);
 }
 }

@@ -56,6 +56,15 @@ auto Parser::parse_expr() -> std::expected<SExpr, std::pmr::string> {
                 advance();
                 goto end;
             }
+            case LEFT_PAREN: {
+                advance();
+                auto new_expr{parse_expr()};
+                if (!new_expr) {
+                    return new_expr;
+                }
+                expr.arguments.push_back(std::move(*new_expr));
+                break;
+            }
             case NUMBER: {
                 advance();
                 expr.arguments.emplace_back(cur);
